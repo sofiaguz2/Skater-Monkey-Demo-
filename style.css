@@ -24,3 +24,7 @@ html, body {
     padding-top: 175px;
     padding-left: 500px;
 }
+
+canvas {
+    display: none;
+}
