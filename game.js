@@ -54,6 +54,7 @@ const Game = {
         this.isCollisionBananas();
         this.isCollisionCapibaras();
         this.generateDelfin();
+        this.isCollisionDolphin();
   
       }, 1000 / this.FPS)
     },
@@ -129,7 +130,7 @@ const Game = {
     },
     generateDelfin() {
       if (this.framesCounter % 1500 === 0) {
-        this.delfines.push(new Delfin(this.ctx, 0, this.height - 300, 150, 75, Math.floor(Math.random() * (7 - 5 + 1) + 5), "delfin.png"))
+        this.delfines.push(new Delfin(this.ctx, 0, this.height - 400, 150, 75, Math.floor(Math.random() * (7 - 5 + 1) + 5), "delfin.png"))
       }
     },
     isCollisionSnakes() {
@@ -167,6 +168,21 @@ const Game = {
           this.monkey.monkeyPos.x + this.monkey.monkeySize.w > capibara.capibaraPos.x &&
           this.monkey.monkeyPos.y < capibara.capibaraPos.y + capibara.capibaraSize.h &&
           this.monkey.monkeySize.h + this.monkey.monkeyPos.y > capibara.capibaraPos.y) {
+          this.musicaFondo.pause()
+          this.musicaColision.play()
+          clearInterval(this.intervalId); //rompe el intervalo
+          console.log("pierdo")
+          this.gameOverFunction()
+          this.gameOver = true
+        }
+      })
+    },
+    isCollisionDolphin() {
+      this.delfines.forEach((delfin) => {
+        if (this.monkey.monkeyPos.x < delfin.delfinPos.x + delfin.delfinSize.w &&
+          this.monkey.monkeyPos.x + this.monkey.monkeySize.w > delfin.delfinPos.x &&
+          this.monkey.monkeyPos.y < delfin.delfinPos.y + delfin.delfinSize.h &&
+          this.monkey.monkeySize.h + this.monkey.monkeyPos.y > delfin.delfinPos.y) {
           this.musicaFondo.pause()
           this.musicaColision.play()
           clearInterval(this.intervalId); //rompe el intervalo
