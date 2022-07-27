@@ -17,6 +17,7 @@ const Game = {
     musicaFondo: new Audio ("soundtrack/SOUNDTRACKFINALMONKEY.mp3"),
     musicaColision: new Audio ("soundtrack/musicaColision.mp3"),
     gameOver: false,
+    randomDolphinNumber: undefined,
 
     setDimensions() {
       this.width = window.innerWidth -50
@@ -55,6 +56,7 @@ const Game = {
         this.isCollisionCapibaras();
         this.generateDelfin();
         this.isCollisionDolphin();
+        this.clearDolphins();
   
       }, 1000 / this.FPS)
     },
@@ -83,6 +85,12 @@ const Game = {
     clearCapibaras() {
       this.capibaras = this.capibaras.filter((capibara) => {
         return capibara.capibaraPos.x > 0
+      })
+    },
+
+    clearDolphins() {
+      this.delfines = this.delfines.filter((delfin) => {
+        return delfin.delfinPos.x < this.width
       })
     },
   
@@ -129,7 +137,7 @@ const Game = {
       }
     },
     generateDelfin() {
-      if (this.framesCounter % 1500 === 0) {
+      if (this.framesCounter % 300 === 0) {
         this.delfines.push(new Delfin(this.ctx, 0, this.height - 400, 150, 75, Math.floor(Math.random() * (7 - 5 + 1) + 5), "delfin.png"))
       }
     },
@@ -177,18 +185,27 @@ const Game = {
         }
       })
     },
+    
     isCollisionDolphin() {
-      this.delfines.forEach((delfin) => {
+      this.delfines.forEach((delfin, index) => {
         if (this.monkey.monkeyPos.x < delfin.delfinPos.x + delfin.delfinSize.w &&
           this.monkey.monkeyPos.x + this.monkey.monkeySize.w > delfin.delfinPos.x &&
           this.monkey.monkeyPos.y < delfin.delfinPos.y + delfin.delfinSize.h &&
           this.monkey.monkeySize.h + this.monkey.monkeyPos.y > delfin.delfinPos.y) {
+          
           this.musicaFondo.pause()
           this.musicaColision.play()
-          clearInterval(this.intervalId); //rompe el intervalo
-          console.log("pierdo")
-          this.gameOverFunction()
-          this.gameOver = true
+          // clearInterval(this.intervalId); //rompe el intervalo
+          this.randomDolphinNumber = (Math.floor(Math.random() * (2 - 1 + 1) + 1))
+          console.log(this.randomDolphinNumber)
+          if(this.randomDolphinNumber === 2) {
+            this.score += 100
+            this.delfines.splice(index, 1)
+          } else if (this.randomDolphinNumber === 1) {
+            clearInterval(this.intervalId)
+            this.delfines.splice(index, 1)
+            this.gameOverFunction()
+          }
         }
       })
     },
