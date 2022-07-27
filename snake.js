@@ -14,7 +14,7 @@ class Snake {
     init() {
       this.image = new Image()
       this.image.src = `images/${this.snakeImage}`
-      this.image.frames = 4;
+      this.image.frames = 2;
       this.image.framesIndex = 0;
     }
     draw(framesCounter) {
