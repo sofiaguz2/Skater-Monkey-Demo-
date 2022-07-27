@@ -31,6 +31,7 @@ const Game = {
       this.start()
       this.setEventListeners()
       this.musicaFondo.play()
+      this.musicaFondo.loop = true
       this.gameOverImage = new Image ()
       this.gameOverImage.src = "images/gameOver.jpeg"
     },
@@ -99,7 +100,7 @@ const Game = {
   
     drawText(text, x, y, color) {
       this.ctx.fillStyle = color
-      this.ctx.font = '30px arial'
+      this.ctx.font = '30px ARCADECLASSIC'
       this.ctx.fillText(text, x, y)
     },
   
@@ -129,6 +130,7 @@ const Game = {
           this.monkey.monkeyPos.y < snake.snakePos.y + snake.snakeSize.h &&
           this.monkey.monkeySize.h + this.monkey.monkeyPos.y > snake.snakePos.y) {
           this.musicaFondo.pause()
+          this.musicaColision.play()
           clearInterval(this.intervalId); //rompe el intervalo
           console.log("pierdo")
           console.log(this.intervalId)
