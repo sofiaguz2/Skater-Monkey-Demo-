@@ -11,6 +11,7 @@ const Game = {
     snakes: [],
     bananas: [],
     capibaras: [],
+    delfines: [],
     intervalId: undefined,
     score: 0,
     musicaFondo: new Audio ("soundtrack/SOUNDTRACKFINALMONKEY.mp3"),
@@ -51,6 +52,7 @@ const Game = {
         this.isCollisionSnakes();
         this.isCollisionBananas();
         this.isCollisionCapibaras();
+        this.generateDelfin();
   
       }, 1000 / this.FPS)
     },
@@ -95,6 +97,9 @@ const Game = {
       this.capibaras.forEach((capibara) => {
         capibara.draw(this.framesCounter);
       })
+      this.delfines.forEach((delfin) => {
+        delfin.draw(this.framesCounter);
+      })
     },
   
     drawText(text, x, y, color) {
@@ -121,7 +126,11 @@ const Game = {
         this.capibaras.push(new Capibara(this.ctx, this.width, this.height - 150, 75, 60, Math.floor(Math.random() * (7 - 5 + 1) + 5), "carpincho eno (2).png"))
       }
     },
-
+    generateDelfin() {
+      if (this.framesCounter % 1500 === 0) {
+        this.delfines.push(new Delfin(this.ctx, 0, this.height - 300, 150, 75, Math.floor(Math.random() * (7 - 5 + 1) + 5), "delfin.png"))
+      }
+    },
     isCollisionSnakes() {
       this.snakes.forEach((snake) => {
         if (this.monkey.monkeyPos.x < snake.snakePos.x + snake.snakeSize.w &&
