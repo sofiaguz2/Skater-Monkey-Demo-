@@ -86,6 +86,7 @@ const Game = {
         this.clearDolphins();
         this.generatePepino();
         this.isCollisionPepinos();
+        this.clearPepinos();
         this.vidas();
       }, 1000 / this.FPS)
     },
@@ -120,6 +121,12 @@ const Game = {
     clearDolphins() {
       this.delfines = this.delfines.filter((delfin) => {
         return delfin.delfinPos.x < this.width
+      })
+    },
+
+    clearPepinos() {
+      this.pepinos = this.pepinos.filter((pepino) => {
+        return pepino.pepinoPos.y < this.height
       })
     },
   
@@ -175,7 +182,7 @@ const Game = {
     },
     generatePepino() {
       if (this.framesCounter % 1000 === 0) {
-        this.pepinos.push(new Pepino(this.ctx, Math.floor(Math.random() * (this.width - 0 + 1) + 0), this.height - 400, 150, 75, Math.floor(Math.random() * (6 - 4 + 1) + 4), "pepino.png"))
+        this.pepinos.push(new Pepino(this.ctx, Math.floor(Math.random() * (this.width - 0 + 1) + 0), this.height - 400, 75, 60, Math.floor(Math.random() * (6 - 4 + 1) + 4), "pepino.png"))
         console.log("pepino")
       }
     },
