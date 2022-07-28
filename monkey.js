@@ -1,11 +1,13 @@
 class Monkey {
-    constructor(ctx, x, y, width, height, imageSrc) {
+    constructor(ctx, x, y, width, height, speed, imageSrc) {
       this.ctx = ctx
       this.monkeyPos = { x: x, y: y }
       this.monkeySize = { w: width, h: height }
       this.monkeyImage = imageSrc
       this.image = undefined
       this.musicaSalto = new Audio ("soundtrack/musicaSalto.wav")
+
+      this.speed = speed
 
       this.posY0 = this.monkeyPos.y;
 
@@ -74,11 +76,11 @@ class Monkey {
     }
 
     moveLeft() {
-      this.monkeyPos.x -= 20
+      this.monkeyPos.x -= this.speed
     }
   
     moveRight() {
-      this.monkeyPos.x += 20
+      this.monkeyPos.x += this.speed
     }
 
     jump() {
