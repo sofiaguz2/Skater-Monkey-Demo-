@@ -3,6 +3,8 @@
     src: url("fonts/ARCADECLASSIC.ttf");
 }
 
+*{box-sizing: border-box;}
+
 html, body {
     height: 100%;
     width: 100%;
@@ -45,4 +47,24 @@ canvas {
     margin-left: 200px;
     flex-wrap: wrap;
     background-color: white;
+}
+
+#pantallaMultijugador {
+    background-image: url("images/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    display: none;
+    padding-top: 330px;
+    padding-left: 400px;
+}
+
+#botones button{
+    font-family: "ARCADECLASSIC";
+    font-size: 64px;
+}
+
+#onePlayerButton {
+    margin-right: 30px;
+    background-color: "#964B00";
 }
