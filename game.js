@@ -12,12 +12,15 @@ const Game = {
     bananas: [],
     capibaras: [],
     delfines: [],
+    pepinos: [],
     intervalId: undefined,
     score: 0,
     musicaFondo: new Audio ("soundtrack/SOUNDTRACKFINALMONKEY.mp3"),
     musicaColision: new Audio ("soundtrack/musicaColision.mp3"),
-    gameOver: false,
+    gameOver: 0,
     randomDolphinNumber: undefined,
+    vidasImagen: undefined,
+    direction: "normal",
 
     setDimensions() {
       this.width = window.innerWidth -50
@@ -38,6 +41,30 @@ const Game = {
       this.gameOverImage.src = "images/gameOver.jpeg"
     },
   
+    vidas() {
+      if (this.gameOver === 0) {
+        this.vidasImagen = new Image()
+        this.vidasImagen.src = "images/corazon-4.png.png"
+        this.ctx.drawImage(this.vidasImagen, 70, 70, 150, 50)
+        
+      } else if (this.gameOver === 1) {
+        this.vidasImagen = new Image(50, 50)
+        this.vidasImagen.src = "images/corazon-3.png.png"
+        this.ctx.drawImage(this.vidasImagen, 70, 70, 150, 50)
+        
+      } else if (this.gameOver === 2) {
+        this.vidasImagen = new Image(50, 50)
+        this.vidasImagen.src = "images/corazon-2.png.png"
+        this.ctx.drawImage(this.vidasImagen, 70, 70, 150, 50)
+        
+      } else if (this.gameOver === 3) {
+        this.vidasImagen = new Image(50, 50)
+        this.vidasImagen.src = "images/corazon-1.png.png"
+        this.ctx.drawImage(this.vidasImagen, 70, 70, 150, 50)
+        
+      }
+    },
+
     start() {
       this.createAll();
   
@@ -57,7 +84,9 @@ const Game = {
         this.generateDelfin();
         this.isCollisionDolphin();
         this.clearDolphins();
-  
+        this.generatePepino();
+        this.isCollisionPepinos();
+        this.vidas();
       }, 1000 / this.FPS)
     },
   
@@ -103,12 +132,15 @@ const Game = {
         snake.draw(this.framesCounter);
       })
       this.monkey.draw(this.framesCounter);
-      this.drawText(`score ${this.score}`, 70, 40, "white")
+      this.drawText(`bananas: ${this.score}`, 70, 40, "white")
       this.capibaras.forEach((capibara) => {
         capibara.draw(this.framesCounter);
       })
       this.delfines.forEach((delfin) => {
         delfin.draw(this.framesCounter);
+      })
+      this.pepinos.forEach((pepino) => {
+        pepino.draw(this.framesCounter)
       })
     },
   
@@ -137,23 +169,31 @@ const Game = {
       }
     },
     generateDelfin() {
-      if (this.framesCounter % 300 === 0) {
-        this.delfines.push(new Delfin(this.ctx, 0, this.height - 400, 150, 75, Math.floor(Math.random() * (7 - 5 + 1) + 5), "delfin.png"))
+      if (this.framesCounter % 2005 === 0) {
+        this.delfines.push(new Delfin(this.ctx, 0, this.height - 400, 150, 75, Math.floor(Math.random() * (12 - 10 + 1) + 10), "delfin.png"))
       }
     },
+    generatePepino() {
+      if (this.framesCounter % 1000 === 0) {
+        this.pepinos.push(new Pepino(this.ctx, Math.floor(Math.random() * (this.width - 0 + 1) + 0), this.height - 400, 150, 75, Math.floor(Math.random() * (6 - 4 + 1) + 4), "pepino.png"))
+        console.log("pepino")
+      }
+    },
+
     isCollisionSnakes() {
-      this.snakes.forEach((snake) => {
+      this.snakes.forEach((snake, index) => {
         if (this.monkey.monkeyPos.x < snake.snakePos.x + snake.snakeSize.w &&
           this.monkey.monkeyPos.x + this.monkey.monkeySize.w > snake.snakePos.x &&
           this.monkey.monkeyPos.y < snake.snakePos.y + snake.snakeSize.h &&
           this.monkey.monkeySize.h + this.monkey.monkeyPos.y > snake.snakePos.y) {
-          this.musicaFondo.pause()
-          this.musicaColision.play()
-          clearInterval(this.intervalId); //rompe el intervalo
-          console.log("pierdo")
-          console.log(this.intervalId)
-          this.gameOver = true
-          this.gameOverFunction()
+          this.gameOver += 1
+          this.snakes.splice(index, 1)
+          if (this.gameOver === 3) {
+            this.musicaFondo.pause()
+            this.musicaColision.play()
+            clearInterval(this.intervalId)
+            this.gameOverFunction()
+          }
         }
       })
     },
@@ -171,17 +211,20 @@ const Game = {
     },
 
     isCollisionCapibaras() {
-      this.capibaras.forEach((capibara) => {
+      this.capibaras.forEach((capibara, index) => {
         if (this.monkey.monkeyPos.x < capibara.capibaraPos.x + capibara.capibaraSize.w &&
           this.monkey.monkeyPos.x + this.monkey.monkeySize.w > capibara.capibaraPos.x &&
           this.monkey.monkeyPos.y < capibara.capibaraPos.y + capibara.capibaraSize.h &&
           this.monkey.monkeySize.h + this.monkey.monkeyPos.y > capibara.capibaraPos.y) {
-          this.musicaFondo.pause()
+          //rompe el intervalo
           this.musicaColision.play()
-          clearInterval(this.intervalId); //rompe el intervalo
-          console.log("pierdo")
-          this.gameOverFunction()
-          this.gameOver = true
+          this.gameOver += 1
+          this.capibaras.splice(index, 1)
+          if (this.gameOver === 3) {
+            this.musicaFondo.pause()
+            clearInterval(this.intervalId)
+            this.gameOverFunction()
+          }
         }
       })
     },
@@ -192,20 +235,28 @@ const Game = {
           this.monkey.monkeyPos.x + this.monkey.monkeySize.w > delfin.delfinPos.x &&
           this.monkey.monkeyPos.y < delfin.delfinPos.y + delfin.delfinSize.h &&
           this.monkey.monkeySize.h + this.monkey.monkeyPos.y > delfin.delfinPos.y) {
-          
-          this.musicaFondo.pause()
-          this.musicaColision.play()
           // clearInterval(this.intervalId); //rompe el intervalo
-          this.randomDolphinNumber = (Math.floor(Math.random() * (2 - 1 + 1) + 1))
-          console.log(this.randomDolphinNumber)
-          if(this.randomDolphinNumber === 2) {
-            this.score += 100
-            this.delfines.splice(index, 1)
-          } else if (this.randomDolphinNumber === 1) {
-            clearInterval(this.intervalId)
-            this.delfines.splice(index, 1)
-            this.gameOverFunction()
+          this.gameOver -= 1
+          this.delfines.splice(index, 1)
+          if (this.gameOver < 0) {
+            this.gameOver = 0
           }
+        }
+      })
+    },
+
+    isCollisionPepinos() {
+      this.pepinos.forEach((pepino, index) => {
+        if (this.monkey.monkeyPos.x < pepino.pepinoPos.x + pepino.pepinoSize.w &&
+            this.monkey.monkeyPos.x + this.monkey.monkeySize.w > pepino.pepinoPos.x &&
+            this.monkey.monkeyPos.y < pepino.pepinoPos.y + pepino.pepinoSize.h &&
+            this.monkey.monkeySize.h + this.monkey.monkeyPos.y > pepino.pepinoPos.y) {
+              if (this.direction === "normal") {
+                this.direction = "inverse"
+              } else {
+                this.direction = "normal"
+              }
+          this.pepinos.splice(index, 1)
         }
       })
     },
@@ -213,9 +264,17 @@ const Game = {
     setEventListeners() {
         window.onkeydown = (event) => {
             if(event.key === "ArrowRight"){
+              if(this.direction === "normal") {
                 this.monkey.moveRight();
-            } else if(event.key === "ArrowLeft") {
+              } else {
                 this.monkey.moveLeft();
+              }
+            } else if(event.key === "ArrowLeft") {
+              if(this.direction === "normal") {
+                this.monkey.moveLeft()
+              } else {
+                this.monkey.moveRight()
+              }
             }}
     },
 
