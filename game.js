@@ -92,6 +92,7 @@ const Game = {
         this.clearBananasDoradas();
         this.generateBananasDoradas();
         this.vidas();
+        this.margins();
       }, 1000 / this.FPS)
     },
   
@@ -195,7 +196,7 @@ const Game = {
       }
     },
     generateDelfin() {
-      if (this.framesCounter % 2005 === 0) {
+      if (this.framesCounter % 2127 === 0) {
         this.delfines.push(new Delfin(this.ctx, 0, this.height - 400, 150, 75, Math.floor(Math.random() * (12 - 10 + 1) + 10), "delfin.png"))
       }
     },
@@ -297,6 +298,14 @@ const Game = {
           this.pepinos.splice(index, 1)
         }
       })
+    },
+
+    margins() {
+      if (this.monkey.monkeyPos.x < 0) {
+        this.monkey.monkeyPos.x = 0
+      } else if (this.monkey.monkeyPos.x > this.width) {
+        this.monkey.monkeyPos.x = this.width - 150
+      }
     },
 
     setEventListeners() {
