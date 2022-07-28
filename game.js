@@ -13,6 +13,7 @@ const Game = {
     capibaras: [],
     delfines: [],
     pepinos: [],
+    bananasDoradas: [],
     intervalId: undefined,
     score: 0,
     musicaFondo: new Audio ("soundtrack/SOUNDTRACKFINALMONKEY.mp3"),
@@ -87,6 +88,9 @@ const Game = {
         this.generatePepino();
         this.isCollisionPepinos();
         this.clearPepinos();
+        this.isCollisionBananasDoradas();
+        this.clearBananasDoradas();
+        this.generateBananasDoradas();
         this.vidas();
       }, 1000 / this.FPS)
     },
@@ -109,6 +113,12 @@ const Game = {
     clearBananas() {
       this.bananas = this.bananas.filter((banana) => {
         return banana.bananaPos.y < this.height
+      })
+    },
+
+    clearBananasDoradas() {
+      this.bananasDoradas = this.bananasDoradas.filter((bananaDorada) => {
+        return bananaDorada.bananaDoradaPos.y < this.height
       })
     },
 
@@ -149,6 +159,9 @@ const Game = {
       this.pepinos.forEach((pepino) => {
         pepino.draw(this.framesCounter)
       })
+      this.bananasDoradas.forEach((bananaDorada) => {
+        bananaDorada.draw(this.framesCounter)
+      })
     },
   
     drawText(text, x, y, color) {
@@ -170,6 +183,12 @@ const Game = {
       }
     },
   
+    generateBananasDoradas() {
+      if (this.framesCounter % 1500 === 0) {
+        this.bananasDoradas.push(new BananaDorada(this.ctx, Math.floor(Math.random() * (this.width - 0 + 1) + 0), 30, 100, 100, Math.floor(Math.random() * (8 - 6 + 1) + 6), "bananaDorada.png"))
+      }
+    },
+
     generateCapibaras() {
       if (this.framesCounter % 500 === 0) {
         this.capibaras.push(new Capibara(this.ctx, this.width, this.height - 150, 75, 60, Math.floor(Math.random() * (7 - 5 + 1) + 5), "carpincho eno (2).png"))
@@ -213,6 +232,18 @@ const Game = {
             this.monkey.monkeySize.h + this.monkey.monkeyPos.y > banana.bananaPos.y) {
           this.score += 1
           this.bananas.splice(index, 1)
+        }
+      })
+    },
+
+    isCollisionBananasDoradas() {
+      this.bananasDoradas.forEach((bananaDorada, index) => {
+        if (this.monkey.monkeyPos.x < bananaDorada.bananaDoradaPos.x + bananaDorada.bananaDoradaSize.w &&
+            this.monkey.monkeyPos.x + this.monkey.monkeySize.w > bananaDorada.bananaDoradaPos.x &&
+            this.monkey.monkeyPos.y < bananaDorada.bananaDoradaPos.y + bananaDorada.bananaDoradaSize.h &&
+            this.monkey.monkeySize.h + this.monkey.monkeyPos.y > bananaDorada.bananaDoradaPos.y) {
+          this.score += 10
+          this.bananasDoradas.splice(index, 1)
         }
       })
     },
@@ -293,12 +324,45 @@ const Game = {
       this.ctx.fillText("GAME OVER", this.width / 10 * 3.5, this.height / 10 * 4)
       this.ctx.font = "32px ARCADECLASSIC"
       this.ctx.fillStyle = "yellow"
-      this.ctx.fillText(`bananas: ${this.score}`, this.width / 6 * 2, this.height / 10 * 6)
+      this.ctx.fillText(`bananas: ${this.score}`, this.width / 6 * 2, this.height / 10 * 4.8)
       
       this.ctx.fillRect(this.width / 15 * 8, this.height / 13 * 7, this.width / 8, this.height / 10),
       this.ctx.fillStyle = "black"
       this.ctx.font = "25px ARCADECLASSIC"
       this.ctx.fillText("Refresh   to", this.width / 19 * 10.435, this.height / 13 * 7.55)
       this.ctx.fillText("try again", this.width / 19 * 10.445, this.height / 13 * 7.95)
-    }
+
+      
+      let names = ["mono del betis", "Donkey Kong", "George el curioso", "Harambe", "Abu", "Rafiki", "Botas", "King Kong", "Donkey Kong jr.", "Mocoyoyo", "Sofia", "Alex", "Diego", "Decas", "Patri", "Lenis", "Valentín", "Gabi", "Cheeta", "Diddy Kong", "Cranky Kong", "Joaquin", "Ron", "Wrinkly Kong", "Funky Kong", "Candy Kong", "Dixie Kong", "Terk", "mono NFT", "Bubbles", "Coco", "Eliminator", "Sungu Kong", "Gongon", "Meemee"]
+      let scores = localStorage.getItem("ranking")
+     // localStorage.setItem("ranking", JSON.stringify(scores))
+      if (scores) {
+        scores = JSON.parse(scores);
+        console.log(scores)
+        scores.push(this.score)
+        localStorage.setItem("ranking", JSON.stringify(scores))
+      } else {
+        scores = []
+        scores.push(this.score + randomName)
+        localStorage.setItem("ranking", JSON.stringify(scores))
+      }
+      let sortedScores = scores.sort(function(score1, score2) {
+        if (score1 > score2) {
+          return -1
+        } else if (score1 < score2) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      this.namedScores(sortedScores, names)
+      
+
+    },
+    namedScores(sortedScores, names) {
+        for(index = 0; index < 5; index++) {
+          let randomName = names[Math.floor(Math.random() * names.length)]
+          this.ctx.fillText(`${randomName}: ${sortedScores[index]}`, this.width / 6 * 2, this.height / 10 * 5.4 + 30 * index)
+        }
+    } 
   }

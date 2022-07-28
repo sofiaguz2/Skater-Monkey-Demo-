@@ -23,6 +23,7 @@ html, body {
 .startbutton{
     padding-top: 50px;
     padding-left: 625px;
+    display: flex;
 }
 .monoreal{
     display: flex;
@@ -32,4 +33,16 @@ html, body {
 
 canvas {
     display: none;
+}
+
+#botonInfo {
+    display: flex;
+}
+
+.info {
+    font-family: "ARCADECLASSIC";
+    font-size: 25px;
+    margin-left: 200px;
+    flex-wrap: wrap;
+    background-color: white;
 }
