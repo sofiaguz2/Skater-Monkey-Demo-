@@ -201,8 +201,8 @@ const Game = {
       }
     },
     generatePepino() {
-      if (this.framesCounter % 1000 === 0) {
-        this.pepinos.push(new Pepino(this.ctx, Math.floor(Math.random() * (this.width - 0 + 1) + 0), this.height - 400, 75, 60, Math.floor(Math.random() * (6 - 4 + 1) + 4), "pepino.png"))
+      if (this.framesCounter % 1046 === 0) {
+        this.pepinos.push(new Pepino(this.ctx, Math.floor(Math.random() * (this.width - 0 + 1) + 0), 0, 75, 60, Math.floor(Math.random() * (6 - 4 + 1) + 4), "pepino.png"))
         console.log("pepino")
       }
     },
