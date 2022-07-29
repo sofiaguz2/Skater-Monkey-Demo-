@@ -121,6 +121,7 @@ const Game2 = {
         this.generateBananasDoradas();
         this.vidas();
         this.margins();
+        this.margins2();
         this.vidas2();
       }, 1000 / this.FPS)
     },
@@ -389,11 +390,19 @@ const Game2 = {
       })
     },
 
-    margins() {
+    margins2() {
       if (this.monkey2.monkey2Pos.x < 0) {
         this.monkey2.monkey2Pos.x = 0
       } else if (this.monkey2.monkey2Pos.x > this.width) {
         this.monkey2.monkey2Pos.x = this.width - 150
+      }
+    },
+
+    margins() {
+      if (this.monkey.monkeyPos.x < 0) {
+        this.monkey.monkeyPos.x = 0
+      } else if (this.monkey.monkeyPos.x > this.width) {
+        this.monkey.monkeyPos.x = this.width - 150
       }
     },
 
