@@ -352,8 +352,7 @@ const Game = {
         localStorage.setItem("ranking", JSON.stringify(scores))
       } else {
         scores = []
-        let randomName = names[Math.floor(Math.random() * names.length)]
-        scores.push(this.score + randomName)
+        scores.push(this.score)
         localStorage.setItem("ranking", JSON.stringify(scores))
       }
       let sortedScores = scores.sort(function(score1, score2) {
