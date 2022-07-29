@@ -28,7 +28,7 @@ class Monkey {
     }
   
     draw(framesCounter) {
-        this.ctx.drawImage(
+      this.ctx.drawImage(
             this.image,
             this.image.framesIndex * (this.image.width / this.image.frames),
             0,

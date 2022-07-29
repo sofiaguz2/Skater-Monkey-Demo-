@@ -98,7 +98,7 @@ const Game = {
   
     createAll() {
       this.background = new Background(this.ctx, this.width, this.height);
-      this.monkey = new Monkey(this.ctx, this.width / 2, this.height - 230, 150, 150, "monkey.png");
+      this.monkey = new Monkey(this.ctx, this.width / 2, this.height - 230, 150, 150, 20, "monkey.png");
     },
   
     clear() {

@@ -127,8 +127,8 @@ const Game2 = {
   
     createAll() {
       this.background = new Background(this.ctx, this.width, this.height);
-      this.monkey2 = new Monkey2(this.ctx, this.width / 2, this.height - 230, 150, 150, 50, "monkey2.png");
-      this.monkey = new Monkey(this.ctx, this.width / 2, this.height - 230, 150, 150, 50, "monkey.png");
+      this.monkey2 = new Monkey2(this.ctx, this.width / 2 - 150, this.height - 230, 150, 150, 50, "monkey2.png");
+      this.monkey = new Monkey(this.ctx, this.width / 2 + 150, this.height - 230, 150, 150, 50, "monkey.png");
     },
   
     clear() {
@@ -223,7 +223,7 @@ const Game2 = {
     },
 
     generateCapibaras() {
-      if (this.framesCounter % 50 === 0) {
+      if (this.framesCounter % 500 === 0) {
         this.capibaras.push(new Capibara(this.ctx, this.width, this.height - 150, 75, 60, Math.floor(Math.random() * (7 - 5 + 1) + 5), "carpincho eno (2).png"))
       }
     },
